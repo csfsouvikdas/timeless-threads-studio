@@ -4,6 +4,7 @@ import { ShoppingBag, Menu, X, User, LogOut, Heart, Sparkles } from "lucide-reac
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useFavorites } from "@/contexts/FavoritesContext";
 
 const navLinks = [
   { label: "Shop", href: "/shop" },
