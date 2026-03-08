@@ -3,24 +3,28 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Package, ShoppingCart, DollarSign, TrendingUp,
-  Plus, Pencil, Trash2, Eye, EyeOff, FileText, ImagePlus, X
+  Plus, Pencil, Trash2, Eye, EyeOff, FileText, ImagePlus, X, Tag
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProducts } from "@/contexts/ProductContext";
 import { useOrders } from "@/contexts/OrderContext";
+import { useCoupons, Coupon } from "@/contexts/CouponContext";
 import { Product, Order } from "@/types";
 import Navbar from "@/components/Navbar";
 
-type Tab = "overview" | "products" | "orders" | "custom-orders";
+type Tab = "overview" | "products" | "orders" | "custom-orders" | "coupons";
 
 const Admin = () => {
   const { user, isAdmin } = useAuth();
   const { products, addProduct, updateProduct, deleteProduct } = useProducts();
   const { orders, customOrders, updateOrderStatus, updateCustomOrderStatus } = useOrders();
+  const { coupons, addCoupon, updateCoupon, deleteCoupon } = useCoupons();
   const navigate = useNavigate();
   const [tab, setTab] = useState<Tab>("overview");
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showCouponForm, setShowCouponForm] = useState(false);
+  const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
 
   if (!user || !isAdmin) {
     navigate("/admin/login");
@@ -44,7 +48,7 @@ const Admin = () => {
 
           {/* Tabs */}
           <div className="flex flex-wrap gap-2 mb-8">
-            {(["overview", "products", "orders", "custom-orders"] as Tab[]).map((t) => (
+            {(["overview", "products", "orders", "custom-orders", "coupons"] as Tab[]).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
@@ -232,6 +236,71 @@ const Admin = () => {
                       {co.referenceImageUrl && (
                         <img src={co.referenceImageUrl} alt="Reference" className="w-32 h-32 rounded-lg object-cover" />
                       )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* Coupons */}
+          {tab === "coupons" && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-heading text-lg font-semibold text-foreground">Coupon Management</h3>
+                <button
+                  onClick={() => { setShowCouponForm(true); setEditingCoupon(null); }}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-primary text-accent-foreground font-body text-sm font-semibold rounded-full"
+                >
+                  <Plus size={16} /> Add Coupon
+                </button>
+              </div>
+
+              {(showCouponForm || editingCoupon) && (
+                <CouponForm
+                  coupon={editingCoupon}
+                  onSave={(data) => {
+                    if (editingCoupon) {
+                      updateCoupon(editingCoupon.id, data);
+                    } else {
+                      addCoupon(data as Omit<Coupon, "id" | "usedCount">);
+                    }
+                    setShowCouponForm(false);
+                    setEditingCoupon(null);
+                  }}
+                  onCancel={() => { setShowCouponForm(false); setEditingCoupon(null); }}
+                />
+              )}
+
+              {coupons.length === 0 ? (
+                <p className="font-body text-sm text-muted-foreground">No coupons created yet.</p>
+              ) : (
+                <div className="space-y-3">
+                  {coupons.map((coupon) => (
+                    <div key={coupon.id} className="flex flex-wrap items-center gap-4 bg-card rounded-xl border border-border p-4">
+                      <Tag size={18} className="text-primary" />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-body text-sm font-bold text-foreground">{coupon.code}</h4>
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-body font-medium ${coupon.active ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
+                            {coupon.active ? "Active" : "Inactive"}
+                          </span>
+                        </div>
+                        <p className="font-body text-xs text-muted-foreground">
+                          {coupon.discountPercent}% off{coupon.maxDiscount ? ` (max ₹${coupon.maxDiscount})` : ""} • Min ₹{coupon.minOrderAmount} • Valid till {new Date(coupon.validTill).toLocaleDateString()} • Used {coupon.usedCount}/{coupon.usageLimit}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => updateCoupon(coupon.id, { active: !coupon.active })} className="p-2 rounded-lg hover:bg-muted transition-colors">
+                          {coupon.active ? <Eye size={16} className="text-muted-foreground" /> : <EyeOff size={16} className="text-muted-foreground" />}
+                        </button>
+                        <button onClick={() => setEditingCoupon(coupon)} className="p-2 rounded-lg hover:bg-muted transition-colors">
+                          <Pencil size={16} className="text-muted-foreground" />
+                        </button>
+                        <button onClick={() => deleteCoupon(coupon.id)} className="p-2 rounded-lg hover:bg-destructive/10 transition-colors">
+                          <Trash2 size={16} className="text-destructive" />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -446,6 +515,81 @@ const ProductForm = ({
         </button>
         <button type="submit" className="px-5 py-2 bg-primary text-accent-foreground font-body text-sm font-semibold rounded-full">
           {product ? "Update" : "Add"} Product
+        </button>
+      </div>
+    </form>
+  );
+};
+
+const CouponForm = ({
+  coupon,
+  onSave,
+  onCancel,
+}: {
+  coupon: Coupon | null;
+  onSave: (data: Partial<Coupon>) => void;
+  onCancel: () => void;
+}) => {
+  const [code, setCode] = useState(coupon?.code || "");
+  const [discountPercent, setDiscountPercent] = useState(coupon?.discountPercent?.toString() || "");
+  const [maxDiscount, setMaxDiscount] = useState(coupon?.maxDiscount?.toString() || "");
+  const [minOrderAmount, setMinOrderAmount] = useState(coupon?.minOrderAmount?.toString() || "0");
+  const [validTill, setValidTill] = useState(coupon?.validTill || "");
+  const [usageLimit, setUsageLimit] = useState(coupon?.usageLimit?.toString() || "100");
+  const [active, setActive] = useState(coupon?.active ?? true);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave({
+      code: code.toUpperCase().trim(),
+      discountPercent: Number(discountPercent),
+      maxDiscount: maxDiscount ? Number(maxDiscount) : undefined,
+      minOrderAmount: Number(minOrderAmount),
+      validTill,
+      usageLimit: Number(usageLimit),
+      active,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-card rounded-2xl border border-border p-6 mb-6 space-y-4">
+      <h4 className="font-heading text-lg font-semibold text-foreground">{coupon ? "Edit Coupon" : "Add Coupon"}</h4>
+      <div className="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label className="font-body text-sm font-medium text-foreground mb-1 block">Coupon Code</label>
+          <input value={code} onChange={(e) => setCode(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm uppercase focus:outline-none focus:ring-2 focus:ring-ring" placeholder="e.g. SAVE20" />
+        </div>
+        <div>
+          <label className="font-body text-sm font-medium text-foreground mb-1 block">Discount %</label>
+          <input type="number" min="1" max="100" value={discountPercent} onChange={(e) => setDiscountPercent(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+        </div>
+        <div>
+          <label className="font-body text-sm font-medium text-foreground mb-1 block">Max Discount (₹, optional)</label>
+          <input type="number" min="0" value={maxDiscount} onChange={(e) => setMaxDiscount(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+        </div>
+        <div>
+          <label className="font-body text-sm font-medium text-foreground mb-1 block">Min Order Amount (₹)</label>
+          <input type="number" min="0" value={minOrderAmount} onChange={(e) => setMinOrderAmount(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+        </div>
+        <div>
+          <label className="font-body text-sm font-medium text-foreground mb-1 block">Valid Till</label>
+          <input type="date" value={validTill} onChange={(e) => setValidTill(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+        </div>
+        <div>
+          <label className="font-body text-sm font-medium text-foreground mb-1 block">Usage Limit</label>
+          <input type="number" min="1" value={usageLimit} onChange={(e) => setUsageLimit(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+        </div>
+      </div>
+      <label className="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} className="rounded border-border" />
+        <span className="font-body text-sm text-foreground">Active</span>
+      </label>
+      <div className="flex gap-3">
+        <button type="submit" className="px-6 py-3 bg-primary text-accent-foreground font-body font-semibold text-sm rounded-full">
+          {coupon ? "Update" : "Create"} Coupon
+        </button>
+        <button type="button" onClick={onCancel} className="px-6 py-3 bg-card text-foreground font-body text-sm rounded-full border border-border hover:bg-muted">
+          Cancel
         </button>
       </div>
     </form>
