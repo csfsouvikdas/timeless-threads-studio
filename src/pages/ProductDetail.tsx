@@ -13,6 +13,7 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const { getProduct } = useProducts();
   const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const product = getProduct(id || "");
 
   const [selectedSize, setSelectedSize] = useState("");
