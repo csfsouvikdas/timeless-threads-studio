@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Shield } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
 
-const Login = () => {
-  const { login } = useAuth();
+const AdminLogin = () => {
+  const { login, isAdmin } = useAuth();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -22,9 +21,10 @@ const Login = () => {
     }
     const success = login(email, password);
     if (success) {
-      navigate(redirect);
+      // Check admin after login — need to wait for state
+      setTimeout(() => navigate("/admin"), 50);
     } else {
-      setError("Invalid email or password");
+      setError("Invalid admin credentials");
     }
   };
 
@@ -38,8 +38,11 @@ const Login = () => {
           className="w-full max-w-md mx-6 bg-card rounded-2xl border border-border p-8"
         >
           <div className="text-center mb-8">
-            <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Welcome Back</h1>
-            <p className="font-body text-sm text-muted-foreground">Sign in to your Timeless Threads account</p>
+            <div className="w-14 h-14 bg-primary/15 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Shield size={28} className="text-primary" />
+            </div>
+            <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Admin Access</h1>
+            <p className="font-body text-sm text-muted-foreground">Sign in with your admin credentials</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -49,13 +52,13 @@ const Login = () => {
               </div>
             )}
             <div>
-              <label className="font-body text-sm font-medium text-foreground mb-2 block">Email</label>
+              <label className="font-body text-sm font-medium text-foreground mb-2 block">Admin Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="you@example.com"
+                placeholder="admin@timelessthreads.com"
               />
             </div>
             <div>
@@ -72,20 +75,19 @@ const Login = () => {
               type="submit"
               className="w-full py-4 bg-primary text-accent-foreground font-body font-semibold text-sm rounded-full hover:shadow-hover transition-all duration-300"
             >
-              Sign In
+              Sign In as Admin
             </button>
           </form>
 
-          <p className="font-body text-sm text-muted-foreground text-center mt-6">
-            Don't have an account?{" "}
-            <Link to="/signup" className="text-primary font-medium hover:underline">
-              Sign up
-            </Link>
-          </p>
+          <div className="mt-6 p-3 rounded-xl bg-muted/50 font-body text-xs text-muted-foreground">
+            <p className="font-semibold mb-1">Demo Admin Credentials:</p>
+            <p>Email: admin@timelessthreads.com</p>
+            <p>Password: admin123</p>
+          </div>
         </motion.div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default AdminLogin;
