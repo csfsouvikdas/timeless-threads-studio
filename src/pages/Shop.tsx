@@ -32,6 +32,14 @@ const Shop = () => {
     return result;
   }, [products, selectedCategory, sortBy, priceRange]);
 
+  // Reset page when filters change
+  const totalMobilePages = Math.ceil(filtered.length / MOBILE_PAGE_SIZE);
+  const displayProducts = isMobile ? filtered.slice((mobilePage - 1) * MOBILE_PAGE_SIZE, mobilePage * MOBILE_PAGE_SIZE) : filtered;
+
+  const handleCategoryChange = (cat: string) => {
+    setSelectedCategory(cat);
+    setMobilePage(1);
+  };
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
