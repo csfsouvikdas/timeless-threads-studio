@@ -20,6 +20,7 @@ const ProductDetail = () => {
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [customText, setCustomText] = useState("");
+  const [selectedImage, setSelectedImage] = useState(0);
 
   if (!product) {
     return (
