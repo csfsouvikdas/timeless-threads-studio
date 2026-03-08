@@ -48,7 +48,7 @@ const Admin = () => {
 
           {/* Tabs */}
           <div className="flex flex-wrap gap-2 mb-8">
-            {(["overview", "products", "orders", "custom-orders"] as Tab[]).map((t) => (
+            {(["overview", "products", "orders", "custom-orders", "coupons"] as Tab[]).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
