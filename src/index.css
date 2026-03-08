@@ -87,4 +87,9 @@
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
+  cursor: none;
+}
+
+a, button, input, select, textarea, [role="button"] {
+  cursor: none;
 }
