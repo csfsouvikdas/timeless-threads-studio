@@ -120,7 +120,7 @@ const Shop = () => {
                 className="group"
               >
                 <Link to={`/product/${product.id}`}>
-                  <div className="relative rounded-2xl overflow-hidden mb-3 md:mb-4 bg-beige">
+                  <div className="relative rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-4 bg-beige">
                     <img
                       src={product.images[0]}
                       alt={product.name}
