@@ -7,12 +7,14 @@ import CustomDesignCTA from "@/components/CustomDesignCTA";
 import Testimonials from "@/components/Testimonials";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
+import TrustBanner from "@/components/TrustBanner";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <Hero />
+      <TrustBanner />
       <BrandStory />
       <HowItWorks />
       <FeaturedProducts />

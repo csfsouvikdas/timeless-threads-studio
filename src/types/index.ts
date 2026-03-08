@@ -50,6 +50,7 @@ export interface CustomOrder {
   referenceImageUrl?: string;
   customText?: string;
   notes?: string;
+  estimatedPrice?: number;
   status: "Pending" | "Approved" | "In Progress" | "Completed" | "Rejected";
   createdAt: string;
 }
