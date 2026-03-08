@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ShoppingBag, Menu, X, User, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
-  { label: "Shop", href: "#products" },
-  { label: "Custom Order", href: "#custom" },
-  { label: "Our Story", href: "#story" },
-  { label: "How It Works", href: "#process" },
+  { label: "Shop", href: "/shop" },
+  { label: "Custom Order", href: "/custom-order" },
+  { label: "Our Story", href: "/#story" },
+  { label: "How It Works", href: "/#process" },
 ];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { itemCount } = useCart();
+  const { user, logout, isAdmin } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -38,26 +43,56 @@ const Navbar = () => {
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.label}
-              href={link.href}
+              to={link.href}
               className="font-body text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
+          {isAdmin && (
+            <Link to="/admin" className="font-body text-sm font-medium text-primary hover:text-primary/80 transition-colors">
+              Admin
+            </Link>
+          )}
         </div>
 
-        <div className="flex items-center gap-4">
-          <button
+        <div className="flex items-center gap-3">
+          {user ? (
+            <div className="hidden md:flex items-center gap-3">
+              <Link to="/my-orders" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">
+                My Orders
+              </Link>
+              <button
+                onClick={logout}
+                className="p-2 rounded-full hover:bg-pink/50 transition-colors"
+                title="Logout"
+              >
+                <LogOut size={18} className="text-muted-foreground" />
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="hidden md:flex items-center gap-1 p-2 rounded-full hover:bg-pink/50 transition-colors"
+            >
+              <User size={18} className="text-foreground" />
+            </Link>
+          )}
+
+          <Link
+            to="/cart"
             className="relative p-2 rounded-full hover:bg-pink/50 transition-colors"
             aria-label="Cart"
           >
             <ShoppingBag size={20} className="text-foreground" />
-            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary text-accent-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
-              0
-            </span>
-          </button>
+            {itemCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary text-accent-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                {itemCount}
+              </span>
+            )}
+          </Link>
 
           <button
             className="md:hidden p-2"
@@ -80,15 +115,34 @@ const Navbar = () => {
           >
             <div className="container mx-auto px-6 py-4 flex flex-col gap-3">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.label}
-                  href={link.href}
+                  to={link.href}
                   onClick={() => setMobileOpen(false)}
                   className="font-body text-base text-foreground py-2"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
+              {user ? (
+                <>
+                  <Link to="/my-orders" onClick={() => setMobileOpen(false)} className="font-body text-base text-foreground py-2">
+                    My Orders
+                  </Link>
+                  {isAdmin && (
+                    <Link to="/admin" onClick={() => setMobileOpen(false)} className="font-body text-base text-primary py-2">
+                      Admin Dashboard
+                    </Link>
+                  )}
+                  <button onClick={() => { logout(); setMobileOpen(false); }} className="font-body text-base text-destructive py-2 text-left">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <Link to="/login" onClick={() => setMobileOpen(false)} className="font-body text-base text-primary py-2">
+                  Sign In
+                </Link>
+              )}
             </div>
           </motion.div>
         )}

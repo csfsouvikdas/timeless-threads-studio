@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { ShoppingBag, Heart } from "lucide-react";
 import productHoodie from "@/assets/product-hoodie.jpg";
 import productTshirt from "@/assets/product-tshirt.jpg";
@@ -107,12 +108,12 @@ const FeaturedProducts = () => {
           transition={{ delay: 0.6 }}
           className="text-center mt-12"
         >
-          <a
-            href="#"
+          <Link
+            to="/shop"
             className="inline-flex items-center justify-center px-8 py-4 bg-card text-foreground font-body font-semibold text-sm rounded-full border border-border hover:shadow-card transition-all duration-300 hover:-translate-y-0.5"
           >
             View All Products
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>
