@@ -42,7 +42,7 @@ const Signup = () => {
         >
           <div className="text-center mb-8">
             <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Join Us</h1>
-            <p className="font-body text-sm text-muted-foreground">Create your Timeless Threads account</p>
+            <p className="font-body text-sm text-muted-foreground">Create your TimelessThreads account</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
