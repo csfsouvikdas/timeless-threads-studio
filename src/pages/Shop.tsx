@@ -77,7 +77,7 @@ const Shop = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-2 rounded-xl bg-card border border-border font-body text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                className="px-3 py-1.5 md:px-4 md:py-2 rounded-xl bg-card border border-border font-body text-xs md:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               >
                 {sortOptions.map((opt) => (
                   <option key={opt}>{opt}</option>
