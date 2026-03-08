@@ -135,8 +135,8 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-card/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="font-body text-xs text-card/35">
-            © 2026 TimelessThreads by Vipassana. Made with{" "}
-            <Heart size={10} className="inline text-primary fill-primary" /> in India.
+            © 2026 TimelessThreads by Vipassana.
+         
           </p>
           <div className="flex items-center gap-6">
             <Link to="/shipping-returns" className="font-body text-[11px] text-card/35 hover:text-card/60 transition-colors">
