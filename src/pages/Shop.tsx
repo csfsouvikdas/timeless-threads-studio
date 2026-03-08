@@ -17,6 +17,7 @@ const MOBILE_PAGE_SIZE = 4;
 const Shop = () => {
   const { products } = useProducts();
   const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get("category");
   const [selectedCategory, setSelectedCategory] = useState(categoryParam && categories.includes(categoryParam) ? categoryParam : "All");
