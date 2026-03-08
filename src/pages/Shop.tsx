@@ -132,11 +132,11 @@ const Shop = () => {
                     </span>
                     <button
                       onClick={(e) => { e.preventDefault(); toggleFavorite(product); }}
-                      className={`absolute top-2 right-2 md:top-4 md:right-4 p-1.5 md:p-2 rounded-full backdrop-blur-sm transition-colors ${
+                      className={`absolute top-1.5 right-1.5 md:top-4 md:right-4 p-1 md:p-2 rounded-full backdrop-blur-sm transition-colors ${
                         isFavorite(product.id) ? "bg-primary/90 text-accent-foreground" : "bg-card/90 text-muted-foreground hover:text-primary"
                       }`}
                     >
-                      <Heart size={14} className={`md:w-4 md:h-4 ${isFavorite(product.id) ? "fill-current" : ""}`} />
+                      <Heart size={12} className={`md:w-4 md:h-4 ${isFavorite(product.id) ? "fill-current" : ""}`} />
                     </button>
                     {product.stock <= 3 && (
                       <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 px-2 md:px-3 py-0.5 md:py-1 bg-primary/90 backdrop-blur-sm rounded-full font-body text-[10px] md:text-xs font-medium text-accent-foreground">
