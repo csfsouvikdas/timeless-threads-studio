@@ -34,7 +34,7 @@ const HowItWorks = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          className="text-center mb-16"
+          className="text-center mb-8 md:mb-16"
         >
           <p className="font-body text-sm tracking-[0.3em] uppercase text-primary font-semibold mb-4">The Process</p>
           <h2 className="font-heading text-4xl md:text-5xl font-bold text-foreground">How It Works</h2>
