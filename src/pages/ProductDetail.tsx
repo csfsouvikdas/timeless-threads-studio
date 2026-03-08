@@ -53,9 +53,24 @@ const ProductDetail = () => {
           <div className="grid md:grid-cols-2 gap-12">
             {/* Image */}
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}>
-              <div className="rounded-2xl overflow-hidden bg-beige">
-                <img src={product.images[0]} alt={product.name} className="w-full aspect-square object-cover" />
+              <div className="rounded-2xl overflow-hidden bg-beige mb-3">
+                <img src={product.images[selectedImage]} alt={product.name} className="w-full aspect-square object-cover" />
               </div>
+              {product.images.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  {product.images.map((img, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setSelectedImage(i)}
+                      className={`flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 transition-all ${
+                        selectedImage === i ? "border-primary ring-2 ring-primary/30" : "border-border hover:border-primary/50"
+                      }`}
+                    >
+                      <img src={img} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </motion.div>
 
             {/* Details */}
