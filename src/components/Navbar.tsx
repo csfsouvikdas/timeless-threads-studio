@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, Menu, X, User, LogOut } from "lucide-react";
+import { ShoppingBag, Menu, X, User, LogOut, Heart, Sparkles } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -31,76 +31,98 @@ const Navbar = () => {
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-card/90 backdrop-blur-md shadow-soft py-3"
-          : "bg-transparent py-5"
+          ? "bg-card/95 backdrop-blur-lg shadow-soft py-2"
+          : "bg-transparent py-4"
       }`}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between">
-        <Link to="/" className="font-heading text-2xl font-bold text-foreground tracking-tight">
-          Timeless Threads
-        </Link>
-
-        {/* Desktop */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              to={link.href}
-              className="font-body text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {link.label}
-            </Link>
-          ))}
-          {isAdmin && (
-            <Link to="/admin" className="font-body text-sm font-medium text-primary hover:text-primary/80 transition-colors">
-              Admin
-            </Link>
-          )}
-        </div>
-
-        <div className="flex items-center gap-3">
-          {user ? (
-            <div className="hidden md:flex items-center gap-3">
-              <Link to="/my-orders" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">
-                My Orders
-              </Link>
-              <button
-                onClick={logout}
-                className="p-2 rounded-full hover:bg-pink/50 transition-colors"
-                title="Logout"
-              >
-                <LogOut size={18} className="text-muted-foreground" />
-              </button>
+      <div className="container mx-auto px-6">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center group-hover:bg-primary/25 transition-colors">
+              <Sparkles size={16} className="text-primary" />
             </div>
-          ) : (
-            <Link
-              to="/login"
-              className="hidden md:flex items-center gap-1 p-2 rounded-full hover:bg-pink/50 transition-colors"
-            >
-              <User size={18} className="text-foreground" />
-            </Link>
-          )}
-
-          <Link
-            to="/cart"
-            className="relative p-2 rounded-full hover:bg-pink/50 transition-colors"
-            aria-label="Cart"
-          >
-            <ShoppingBag size={20} className="text-foreground" />
-            {itemCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary text-accent-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
-                {itemCount}
+            <div>
+              <span className="font-heading text-xl font-bold text-foreground tracking-tight block leading-tight">
+                Timeless Threads
               </span>
-            )}
+              <span className="font-body text-[9px] tracking-[0.25em] uppercase text-primary/70 font-medium">
+                Handcrafted Crochet
+              </span>
+            </div>
           </Link>
 
-          <button
-            className="md:hidden p-2"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Menu"
-          >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.label}
+                to={link.href}
+                className="relative px-4 py-2 font-body text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-pink/20"
+              >
+                {link.label}
+              </Link>
+            ))}
+            {isAdmin && (
+              <Link to="/admin" className="px-4 py-2 font-body text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
+                Admin
+              </Link>
+            )}
+          </div>
+
+          {/* Right Actions */}
+          <div className="flex items-center gap-1">
+            {user ? (
+              <div className="hidden md:flex items-center gap-1">
+                <Link
+                  to="/my-orders"
+                  className="px-3 py-2 rounded-full hover:bg-pink/20 transition-colors font-body text-sm text-muted-foreground hover:text-foreground"
+                >
+                  My Orders
+                </Link>
+                <button
+                  onClick={logout}
+                  className="p-2.5 rounded-full hover:bg-pink/20 transition-colors"
+                  title="Logout"
+                >
+                  <LogOut size={17} className="text-muted-foreground" />
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="hidden md:flex items-center gap-1.5 px-4 py-2 rounded-full hover:bg-pink/20 transition-colors font-body text-sm font-medium text-muted-foreground hover:text-foreground"
+              >
+                <User size={16} />
+                Sign In
+              </Link>
+            )}
+
+            <Link
+              to="/cart"
+              className="relative p-2.5 rounded-full hover:bg-pink/20 transition-colors"
+              aria-label="Cart"
+            >
+              <ShoppingBag size={19} className="text-foreground" />
+              {itemCount > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary text-accent-foreground text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm"
+                >
+                  {itemCount}
+                </motion.span>
+              )}
+            </Link>
+
+            <button
+              className="md:hidden p-2.5 rounded-full hover:bg-pink/20 transition-colors"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Menu"
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -111,35 +133,35 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-card/95 backdrop-blur-md border-t border-border"
+            className="md:hidden bg-card/98 backdrop-blur-lg border-t border-border"
           >
-            <div className="container mx-auto px-6 py-4 flex flex-col gap-3">
+            <div className="container mx-auto px-6 py-4 flex flex-col gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
                   to={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="font-body text-base text-foreground py-2"
+                  className="font-body text-base text-foreground py-3 px-4 rounded-xl hover:bg-pink/20 transition-colors"
                 >
                   {link.label}
                 </Link>
               ))}
               {user ? (
                 <>
-                  <Link to="/my-orders" onClick={() => setMobileOpen(false)} className="font-body text-base text-foreground py-2">
+                  <Link to="/my-orders" onClick={() => setMobileOpen(false)} className="font-body text-base text-foreground py-3 px-4 rounded-xl hover:bg-pink/20">
                     My Orders
                   </Link>
                   {isAdmin && (
-                    <Link to="/admin" onClick={() => setMobileOpen(false)} className="font-body text-base text-primary py-2">
+                    <Link to="/admin" onClick={() => setMobileOpen(false)} className="font-body text-base text-primary py-3 px-4 rounded-xl hover:bg-primary/10">
                       Admin Dashboard
                     </Link>
                   )}
-                  <button onClick={() => { logout(); setMobileOpen(false); }} className="font-body text-base text-destructive py-2 text-left">
+                  <button onClick={() => { logout(); setMobileOpen(false); }} className="font-body text-base text-destructive py-3 px-4 rounded-xl hover:bg-destructive/10 text-left">
                     Logout
                   </button>
                 </>
               ) : (
-                <Link to="/login" onClick={() => setMobileOpen(false)} className="font-body text-base text-primary py-2">
+                <Link to="/login" onClick={() => setMobileOpen(false)} className="font-body text-base text-primary py-3 px-4 rounded-xl hover:bg-primary/10 font-medium">
                   Sign In
                 </Link>
               )}

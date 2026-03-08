@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Package, ShoppingCart, DollarSign, Users, TrendingUp,
-  Plus, Pencil, Trash2, Eye, EyeOff, ChevronDown, ArrowLeft, FileText
+  Package, ShoppingCart, DollarSign, TrendingUp,
+  Plus, Pencil, Trash2, Eye, EyeOff, FileText, ImagePlus, X
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProducts } from "@/contexts/ProductContext";
@@ -77,7 +77,6 @@ const Admin = () => {
                 ))}
               </div>
 
-              {/* Recent orders */}
               <div className="bg-card rounded-2xl border border-border p-6">
                 <h3 className="font-heading text-lg font-semibold text-foreground mb-4">Recent Orders</h3>
                 {orders.length === 0 ? (
@@ -150,10 +149,19 @@ const Admin = () => {
               <div className="space-y-3">
                 {products.map((product) => (
                   <div key={product.id} className="flex items-center gap-4 bg-card rounded-xl border border-border p-4">
-                    <img src={product.images[0]} alt={product.name} className="w-14 h-14 rounded-lg object-cover" />
+                    <div className="flex gap-2">
+                      {product.images.slice(0, 3).map((img, i) => (
+                        <img key={i} src={img} alt={product.name} className="w-14 h-14 rounded-lg object-cover" />
+                      ))}
+                      {product.images.length > 3 && (
+                        <div className="w-14 h-14 rounded-lg bg-muted flex items-center justify-center">
+                          <span className="font-body text-xs text-muted-foreground">+{product.images.length - 3}</span>
+                        </div>
+                      )}
+                    </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-body text-sm font-semibold text-foreground truncate">{product.name}</h4>
-                      <p className="font-body text-xs text-muted-foreground">{product.category} • Stock: {product.stock}</p>
+                      <p className="font-body text-xs text-muted-foreground">{product.category} • Stock: {product.stock} • {product.images.length} image(s)</p>
                     </div>
                     <span className="font-body text-sm font-bold text-primary">₹{product.price.toLocaleString()}</span>
                     <div className="flex items-center gap-2">
@@ -205,6 +213,9 @@ const Admin = () => {
                           <p className="font-body text-sm font-semibold text-foreground">
                             {co.clothingType} • {co.color} • {co.size}
                           </p>
+                          {co.estimatedPrice && (
+                            <p className="font-body text-sm font-bold text-primary mt-1">Estimated: ₹{co.estimatedPrice.toLocaleString()}</p>
+                          )}
                         </div>
                         <select
                           value={co.status}
@@ -325,6 +336,21 @@ const ProductForm = ({
   const [stock, setStock] = useState(product?.stock?.toString() || "10");
   const [sizes, setSizes] = useState(product?.sizes?.join(", ") || "S, M, L, XL");
   const [colors, setColors] = useState(product?.colors?.join(", ") || "");
+  const [images, setImages] = useState<string[]>(product?.images || []);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    Array.from(files).forEach((file) => {
+      const url = URL.createObjectURL(file);
+      setImages((prev) => [...prev, url]);
+    });
+    e.target.value = "";
+  };
+
+  const removeImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -336,7 +362,7 @@ const ProductForm = ({
       stock: Number(stock),
       sizes: sizes.split(",").map((s) => s.trim()),
       colors: colors.split(",").map((c) => c.trim()),
-      images: product?.images || ["/placeholder.svg"],
+      images: images.length > 0 ? images : ["/placeholder.svg"],
       visible: product?.visible ?? true,
       careInstructions: product?.careInstructions || "Hand wash cold. Lay flat to dry.",
     });
@@ -345,6 +371,43 @@ const ProductForm = ({
   return (
     <form onSubmit={handleSubmit} className="bg-card rounded-2xl border border-border p-6 mb-6 space-y-4">
       <h4 className="font-heading text-lg font-semibold text-foreground">{product ? "Edit Product" : "Add Product"}</h4>
+      
+      {/* Image Upload Section */}
+      <div>
+        <label className="font-body text-xs font-medium text-foreground mb-2 block">Product Images</label>
+        <div className="flex flex-wrap gap-3 mb-3">
+          {images.map((img, i) => (
+            <div key={i} className="relative group">
+              <img src={img} alt={`Product ${i + 1}`} className="w-20 h-20 rounded-xl object-cover border border-border" />
+              <button
+                type="button"
+                onClick={() => removeImage(i)}
+                className="absolute -top-2 -right-2 w-5 h-5 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <X size={12} />
+              </button>
+              {i === 0 && (
+                <span className="absolute bottom-0 left-0 right-0 bg-primary/90 text-accent-foreground text-[8px] font-bold text-center py-0.5 rounded-b-xl">
+                  MAIN
+                </span>
+              )}
+            </div>
+          ))}
+          <label className="w-20 h-20 rounded-xl border-2 border-dashed border-border hover:border-primary flex flex-col items-center justify-center cursor-pointer transition-colors bg-background">
+            <ImagePlus size={20} className="text-muted-foreground mb-1" />
+            <span className="font-body text-[9px] text-muted-foreground">Add</span>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={handleImageUpload}
+            />
+          </label>
+        </div>
+        <p className="font-body text-[10px] text-muted-foreground">First image will be the main product photo. You can add multiple images.</p>
+      </div>
+
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
           <label className="font-body text-xs font-medium text-foreground mb-1 block">Name</label>
