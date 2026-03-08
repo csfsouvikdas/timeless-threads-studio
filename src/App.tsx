@@ -17,6 +17,7 @@ import Signup from "./pages/Signup";
 import MyOrders from "./pages/MyOrders";
 import CustomOrder from "./pages/CustomOrder";
 import Admin from "./pages/Admin";
+import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
