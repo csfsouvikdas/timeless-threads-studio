@@ -242,6 +242,71 @@ const Admin = () => {
               )}
             </motion.div>
           )}
+
+          {/* Coupons */}
+          {tab === "coupons" && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-heading text-lg font-semibold text-foreground">Coupon Management</h3>
+                <button
+                  onClick={() => { setShowCouponForm(true); setEditingCoupon(null); }}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-primary text-accent-foreground font-body text-sm font-semibold rounded-full"
+                >
+                  <Plus size={16} /> Add Coupon
+                </button>
+              </div>
+
+              {(showCouponForm || editingCoupon) && (
+                <CouponForm
+                  coupon={editingCoupon}
+                  onSave={(data) => {
+                    if (editingCoupon) {
+                      updateCoupon(editingCoupon.id, data);
+                    } else {
+                      addCoupon(data as Omit<Coupon, "id" | "usedCount">);
+                    }
+                    setShowCouponForm(false);
+                    setEditingCoupon(null);
+                  }}
+                  onCancel={() => { setShowCouponForm(false); setEditingCoupon(null); }}
+                />
+              )}
+
+              {coupons.length === 0 ? (
+                <p className="font-body text-sm text-muted-foreground">No coupons created yet.</p>
+              ) : (
+                <div className="space-y-3">
+                  {coupons.map((coupon) => (
+                    <div key={coupon.id} className="flex flex-wrap items-center gap-4 bg-card rounded-xl border border-border p-4">
+                      <Tag size={18} className="text-primary" />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-body text-sm font-bold text-foreground">{coupon.code}</h4>
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-body font-medium ${coupon.active ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
+                            {coupon.active ? "Active" : "Inactive"}
+                          </span>
+                        </div>
+                        <p className="font-body text-xs text-muted-foreground">
+                          {coupon.discountPercent}% off{coupon.maxDiscount ? ` (max ₹${coupon.maxDiscount})` : ""} • Min ₹{coupon.minOrderAmount} • Valid till {new Date(coupon.validTill).toLocaleDateString()} • Used {coupon.usedCount}/{coupon.usageLimit}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => updateCoupon(coupon.id, { active: !coupon.active })} className="p-2 rounded-lg hover:bg-muted transition-colors">
+                          {coupon.active ? <Eye size={16} className="text-muted-foreground" /> : <EyeOff size={16} className="text-muted-foreground" />}
+                        </button>
+                        <button onClick={() => setEditingCoupon(coupon)} className="p-2 rounded-lg hover:bg-muted transition-colors">
+                          <Pencil size={16} className="text-muted-foreground" />
+                        </button>
+                        <button onClick={() => deleteCoupon(coupon.id)} className="p-2 rounded-lg hover:bg-destructive/10 transition-colors">
+                          <Trash2 size={16} className="text-destructive" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
         </div>
       </div>
     </div>
