@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ShoppingBag, Heart, Minus, Plus, ArrowLeft } from "lucide-react";
 import { useProducts } from "@/contexts/ProductContext";
 import { useCart } from "@/contexts/CartContext";
+import { useFavorites } from "@/contexts/FavoritesContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
