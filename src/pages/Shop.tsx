@@ -58,7 +58,7 @@ const Shop = () => {
               {categories.map((cat) => (
                 <button
                   key={cat}
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => handleCategoryChange(cat)}
                   className={`px-4 py-2 rounded-full font-body text-sm font-medium transition-all ${
                     selectedCategory === cat
                       ? "bg-primary text-accent-foreground"
