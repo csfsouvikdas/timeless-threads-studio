@@ -1,14 +1,17 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ShoppingBag, Heart, SlidersHorizontal, X } from "lucide-react";
+import { ShoppingBag, Heart, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useProducts } from "@/contexts/ProductContext";
 import { useCart } from "@/contexts/CartContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const categories = ["All", "Hoodies", "T-Shirts", "Sweatshirts", "Custom", "Limited Edition"];
 const sortOptions = ["Newest", "Price: Low to High", "Price: High to Low"];
+
+const MOBILE_PAGE_SIZE = 4;
 
 const Shop = () => {
   const { products } = useProducts();
@@ -17,6 +20,8 @@ const Shop = () => {
   const [sortBy, setSortBy] = useState("Newest");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [showFilters, setShowFilters] = useState(false);
+  const [mobilePage, setMobilePage] = useState(1);
+  const isMobile = useIsMobile();
 
   const filtered = useMemo(() => {
     let result = products.filter((p) => p.visible);
@@ -27,6 +32,14 @@ const Shop = () => {
     return result;
   }, [products, selectedCategory, sortBy, priceRange]);
 
+  // Reset page when filters change
+  const totalMobilePages = Math.ceil(filtered.length / MOBILE_PAGE_SIZE);
+  const displayProducts = isMobile ? filtered.slice((mobilePage - 1) * MOBILE_PAGE_SIZE, mobilePage * MOBILE_PAGE_SIZE) : filtered;
+
+  const handleCategoryChange = (cat: string) => {
+    setSelectedCategory(cat);
+    setMobilePage(1);
+  };
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -45,7 +58,7 @@ const Shop = () => {
               {categories.map((cat) => (
                 <button
                   key={cat}
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => handleCategoryChange(cat)}
                   className={`px-4 py-2 rounded-full font-body text-sm font-medium transition-all ${
                     selectedCategory === cat
                       ? "bg-primary text-accent-foreground"
@@ -93,8 +106,8 @@ const Shop = () => {
           </div>
 
           {/* Product grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filtered.map((product, i) => (
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+            {displayProducts.map((product, i) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -103,43 +116,78 @@ const Shop = () => {
                 className="group"
               >
                 <Link to={`/product/${product.id}`}>
-                  <div className="relative rounded-2xl overflow-hidden mb-4 bg-beige">
+                  <div className="relative rounded-2xl overflow-hidden mb-3 md:mb-4 bg-beige">
                     <img
                       src={product.images[0]}
                       alt={product.name}
                       className="w-full aspect-[3/4] object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/10 transition-colors duration-300" />
-                    <span className="absolute top-4 left-4 px-3 py-1 bg-card/90 backdrop-blur-sm rounded-full font-body text-xs font-medium text-foreground">
+                    <span className="absolute top-2 left-2 md:top-4 md:left-4 px-2 md:px-3 py-0.5 md:py-1 bg-card/90 backdrop-blur-sm rounded-full font-body text-[10px] md:text-xs font-medium text-foreground">
                       {product.category}
                     </span>
                     {product.stock <= 3 && (
-                      <span className="absolute top-4 right-4 px-3 py-1 bg-primary/90 backdrop-blur-sm rounded-full font-body text-xs font-medium text-accent-foreground">
+                      <span className="absolute top-2 right-2 md:top-4 md:right-4 px-2 md:px-3 py-0.5 md:py-1 bg-primary/90 backdrop-blur-sm rounded-full font-body text-[10px] md:text-xs font-medium text-accent-foreground">
                         Only {product.stock} left
                       </span>
                     )}
                   </div>
                 </Link>
-                <div className="flex items-start justify-between">
-                  <div>
+                <div className="flex items-start justify-between gap-1">
+                  <div className="min-w-0">
                     <Link to={`/product/${product.id}`}>
-                      <h3 className="font-heading text-lg font-semibold text-foreground mb-1 hover:text-primary transition-colors">
+                      <h3 className="font-heading text-sm md:text-lg font-semibold text-foreground mb-0.5 md:mb-1 hover:text-primary transition-colors truncate">
                         {product.name}
                       </h3>
                     </Link>
-                    <p className="font-body text-sm font-semibold text-primary">₹{product.price.toLocaleString()}</p>
+                    <p className="font-body text-xs md:text-sm font-semibold text-primary">₹{product.price.toLocaleString()}</p>
                   </div>
                   <button
                     onClick={() => addToCart(product, product.sizes[0], product.colors[0])}
-                    className="p-2 rounded-xl bg-primary/10 hover:bg-primary/20 transition-colors"
+                    className="p-1.5 md:p-2 rounded-xl bg-primary/10 hover:bg-primary/20 transition-colors flex-shrink-0"
                     title="Quick add to cart"
                   >
-                    <ShoppingBag size={16} className="text-primary" />
+                    <ShoppingBag size={14} className="text-primary md:w-4 md:h-4" />
                   </button>
                 </div>
               </motion.div>
             ))}
           </div>
+
+          {/* Mobile pagination */}
+          {isMobile && totalMobilePages > 1 && (
+            <div className="flex items-center justify-center gap-3 mt-8">
+              <button
+                onClick={() => setMobilePage((p) => Math.max(1, p - 1))}
+                disabled={mobilePage === 1}
+                className="p-2 rounded-full bg-card border border-border disabled:opacity-30 transition-opacity"
+              >
+                <ChevronLeft size={18} className="text-foreground" />
+              </button>
+              <div className="flex gap-1.5">
+                {Array.from({ length: totalMobilePages }, (_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setMobilePage(i + 1)}
+                    className={`w-8 h-8 rounded-full font-body text-xs font-medium transition-all ${
+                      mobilePage === i + 1
+                        ? "bg-primary text-accent-foreground"
+                        : "bg-card border border-border text-muted-foreground"
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => setMobilePage((p) => Math.min(totalMobilePages, p + 1))}
+                disabled={mobilePage === totalMobilePages}
+                className="p-2 rounded-full bg-card border border-border disabled:opacity-30 transition-opacity"
+              >
+                <ChevronRight size={18} className="text-foreground" />
+              </button>
+            </div>
+          )}
 
           {filtered.length === 0 && (
             <div className="text-center py-20">
