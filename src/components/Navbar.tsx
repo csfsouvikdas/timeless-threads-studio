@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ShoppingBag, Menu, X, User, LogOut, Heart, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ShoppingBag, Menu, X, User, LogOut, Heart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFavorites } from "@/contexts/FavoritesContext";
+import logo from "@/assets/logo.png";
 
 const navLinks = [
   { label: "Shop", href: "/shop" },
@@ -43,18 +44,18 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
             <motion.div
-              whileHover={{ rotate: 12, scale: 1.1 }}
+              whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
-              className="w-10 h-10 rounded-2xl bg-primary/15 flex items-center justify-center group-hover:bg-primary/25 transition-colors border border-primary/10"
+              className="w-10 h-10 rounded-full overflow-hidden border border-primary/20 shadow-sm"
             >
-              <Sparkles size={17} className="text-primary" />
+              <img src={logo} alt="TimelessThreads" className="w-full h-full object-cover" />
             </motion.div>
             <div>
-              <span className="font-heading text-xl font-bold text-foreground tracking-tight block leading-tight">
-                Timeless Threads
+              <span className="font-heading text-lg font-bold text-foreground tracking-tight block leading-tight">
+                TimelessThreads
               </span>
-              <span className="font-body text-[9px] tracking-[0.25em] uppercase text-primary/70 font-medium">
-                Handcrafted Crochet
+              <span className="font-body text-[8px] tracking-[0.2em] uppercase text-primary/70 font-medium">
+                By Vipassana
               </span>
             </div>
           </Link>
