@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { ShoppingBag, Heart, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useProducts } from "@/contexts/ProductContext";
 import { useCart } from "@/contexts/CartContext";
@@ -16,7 +16,9 @@ const MOBILE_PAGE_SIZE = 4;
 const Shop = () => {
   const { products } = useProducts();
   const { addToCart } = useCart();
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchParams] = useSearchParams();
+  const categoryParam = searchParams.get("category");
+  const [selectedCategory, setSelectedCategory] = useState(categoryParam && categories.includes(categoryParam) ? categoryParam : "All");
   const [sortBy, setSortBy] = useState("Newest");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [showFilters, setShowFilters] = useState(false);
