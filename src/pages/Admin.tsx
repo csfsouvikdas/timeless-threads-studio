@@ -18,10 +18,13 @@ const Admin = () => {
   const { user, isAdmin } = useAuth();
   const { products, addProduct, updateProduct, deleteProduct } = useProducts();
   const { orders, customOrders, updateOrderStatus, updateCustomOrderStatus } = useOrders();
+  const { coupons, addCoupon, updateCoupon, deleteCoupon } = useCoupons();
   const navigate = useNavigate();
   const [tab, setTab] = useState<Tab>("overview");
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showCouponForm, setShowCouponForm] = useState(false);
+  const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
 
   if (!user || !isAdmin) {
     navigate("/admin/login");
