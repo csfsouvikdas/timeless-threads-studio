@@ -101,6 +101,23 @@ const Navbar = () => {
             )}
 
             <Link
+              to="/favorites"
+              className="relative p-2.5 rounded-full hover:bg-pink/20 transition-colors"
+              aria-label="Favorites"
+            >
+              <Heart size={19} className="text-foreground" />
+              {favCount > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary text-accent-foreground text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm"
+                >
+                  {favCount}
+                </motion.span>
+              )}
+            </Link>
+
+            <Link
               to="/cart"
               className="relative p-2.5 rounded-full hover:bg-pink/20 transition-colors"
               aria-label="Cart"

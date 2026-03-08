@@ -145,8 +145,13 @@ const ProductDetail = () => {
                   <ShoppingBag size={18} />
                   Add to Cart
                 </button>
-                <button className="p-4 rounded-full border border-border hover:bg-pink/30 transition-colors">
-                  <Heart size={18} className="text-foreground" />
+                <button
+                  onClick={() => toggleFavorite(product)}
+                  className={`p-4 rounded-full border transition-colors ${
+                    isFavorite(product.id) ? "bg-primary/20 border-primary" : "border-border hover:bg-pink/30"
+                  }`}
+                >
+                  <Heart size={18} className={isFavorite(product.id) ? "text-primary fill-primary" : "text-foreground"} />
                 </button>
               </div>
 
