@@ -31,13 +31,14 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
   };
 
-  const addCustomOrder = (order: Omit<CustomOrder, "id" | "createdAt">) => {
+  const addCustomOrder = (order: Omit<CustomOrder, "id" | "createdAt">): CustomOrder => {
     const newOrder: CustomOrder = {
       ...order,
       id: `CUST-${Date.now()}`,
       createdAt: new Date().toISOString(),
     };
     setCustomOrders((prev) => [newOrder, ...prev]);
+    return newOrder;
   };
 
   const updateCustomOrderStatus = (id: string, status: CustomOrder["status"]) => {

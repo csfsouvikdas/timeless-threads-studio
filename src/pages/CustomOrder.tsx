@@ -102,7 +102,7 @@ const CustomOrderPage = () => {
       status: "Pending",
       estimatedPrice: grandTotal,
     });
-    setOrderId(order?.id || `CO-${Date.now()}`);
+    setOrderId(order.id);
     setStep(8);
   };
 
