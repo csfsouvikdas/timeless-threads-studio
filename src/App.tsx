@@ -19,6 +19,7 @@ import CustomOrder from "./pages/CustomOrder";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
+import CustomCursor from "./components/CustomCursor";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
         <ProductProvider>
           <CartProvider>
             <OrderProvider>
+              <CustomCursor />
               <Toaster />
               <Sonner />
               <BrowserRouter>

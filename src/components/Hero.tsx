@@ -1,33 +1,32 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import heroImg from "@/assets/hero-products.jpg";
+import HeroScene from "@/components/HeroScene";
+import { useMousePosition } from "@/hooks/useMousePosition";
 
 const Hero = () => {
+  const { normalized } = useMousePosition();
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0">
+      {/* Background image with parallax */}
+      <motion.div
+        className="absolute inset-0"
+        animate={{ x: normalized.x * -15, y: normalized.y * -15 }}
+        transition={{ type: "spring", stiffness: 50, damping: 30 }}
+      >
         <img
           src={heroImg}
           alt="Handmade crochet clothing collection"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-background/30" />
-      </div>
+      </motion.div>
 
-      {/* Floating decorative elements */}
-      <motion.div
-        animate={{ y: [-10, 10, -10] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-32 right-20 w-16 h-16 rounded-full bg-pink/40 blur-xl hidden lg:block"
-      />
-      <motion.div
-        animate={{ y: [10, -10, 10] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-40 right-40 w-24 h-24 rounded-full bg-lavender/40 blur-xl hidden lg:block"
-      />
+      {/* 3D Scene overlay */}
+      <HeroScene />
 
-      <div className="relative container mx-auto px-6 pt-24">
+      <div className="relative container mx-auto px-6 pt-24" style={{ zIndex: 2 }}>
         <div className="max-w-2xl">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -43,6 +42,9 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
             className="font-heading text-5xl md:text-7xl font-bold text-foreground leading-[1.1] mb-6"
+            style={{
+              textShadow: `${normalized.x * 3}px ${-normalized.y * 3}px 10px hsl(var(--primary) / 0.15)`,
+            }}
           >
             Hand-stitched stories you can{" "}
             <span className="italic text-primary">wear.</span>
@@ -66,13 +68,14 @@ const Hero = () => {
           >
             <Link
               to="/shop"
-              className="inline-flex items-center justify-center px-8 py-4 bg-primary text-accent-foreground font-body font-semibold text-sm rounded-full hover:shadow-hover transition-all duration-300 hover:-translate-y-0.5"
+              className="group inline-flex items-center justify-center px-8 py-4 bg-primary text-accent-foreground font-body font-semibold text-sm rounded-full hover:shadow-hover transition-all duration-300 hover:-translate-y-0.5 relative overflow-hidden"
             >
-              Shop Collection
+              <span className="relative z-10">Shop Collection</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </Link>
             <Link
               to="/custom-order"
-              className="inline-flex items-center justify-center px-8 py-4 bg-card text-foreground font-body font-semibold text-sm rounded-full border border-border hover:shadow-card transition-all duration-300 hover:-translate-y-0.5"
+              className="inline-flex items-center justify-center px-8 py-4 bg-card/80 backdrop-blur-sm text-foreground font-body font-semibold text-sm rounded-full border border-border hover:shadow-card transition-all duration-300 hover:-translate-y-0.5"
             >
               Create Custom Design
             </Link>
