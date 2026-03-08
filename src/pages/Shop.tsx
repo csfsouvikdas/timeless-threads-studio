@@ -10,6 +10,8 @@ import Footer from "@/components/Footer";
 const categories = ["All", "Hoodies", "T-Shirts", "Sweatshirts", "Custom", "Limited Edition"];
 const sortOptions = ["Newest", "Price: Low to High", "Price: High to Low"];
 
+const MOBILE_PAGE_SIZE = 4;
+
 const Shop = () => {
   const { products } = useProducts();
   const { addToCart } = useCart();
@@ -17,6 +19,8 @@ const Shop = () => {
   const [sortBy, setSortBy] = useState("Newest");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [showFilters, setShowFilters] = useState(false);
+  const [mobilePage, setMobilePage] = useState(1);
+  const isMobile = useIsMobile();
 
   const filtered = useMemo(() => {
     let result = products.filter((p) => p.visible);
