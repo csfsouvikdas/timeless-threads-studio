@@ -40,7 +40,32 @@ const HowItWorks = () => {
           <h2 className="font-heading text-4xl md:text-5xl font-bold text-foreground">How It Works</h2>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Mobile: horizontal scroll */}
+        <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide md:hidden">
+          {steps.map((step, i) => (
+            <motion.div
+              key={step.title}
+              initial={{ opacity: 0, x: 30 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: i * 0.1, duration: 0.5 }}
+              className="min-w-[160px] snap-center"
+            >
+              <div className="relative text-center p-4">
+                <div className="relative z-10 mx-auto w-12 h-12 bg-pink/30 rounded-xl flex items-center justify-center mb-3">
+                  <step.icon size={20} className="text-foreground" />
+                </div>
+                <span className="font-heading text-3xl font-bold text-border absolute top-1 left-1/2 -translate-x-1/2 -translate-y-1">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="font-heading text-sm font-semibold text-foreground mb-1">{step.title}</h3>
+                <p className="font-body text-xs text-muted-foreground">{step.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Desktop: grid */}
+        <div className="hidden md:grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, i) => (
             <motion.div
               key={step.title}
