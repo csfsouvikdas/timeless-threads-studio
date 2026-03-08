@@ -25,15 +25,15 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
 
   const addProduct = (product: Omit<Product, "id">) => {
     const newProduct: Product = { ...product, id: `prod-${Date.now()}` };
-    setProducts((prev) => [...prev, newProduct]);
+    persist([...products, newProduct]);
   };
 
   const updateProduct = (id: string, updates: Partial<Product>) => {
-    setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, ...updates } : p)));
+    persist(products.map((p) => (p.id === id ? { ...p, ...updates } : p)));
   };
 
   const deleteProduct = (id: string) => {
-    setProducts((prev) => prev.filter((p) => p.id !== id));
+    persist(products.filter((p) => p.id !== id));
   };
 
   const getProduct = (id: string) => products.find((p) => p.id === id);
