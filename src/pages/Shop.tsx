@@ -146,20 +146,20 @@ const Shop = () => {
                   </div>
                 </Link>
                 <div className="flex items-start justify-between gap-1">
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <Link to={`/product/${product.id}`}>
-                      <h3 className="font-heading text-sm md:text-lg font-semibold text-foreground mb-0.5 md:mb-1 hover:text-primary transition-colors truncate">
+                      <h3 className="font-heading text-xs md:text-lg font-semibold text-foreground mb-0.5 hover:text-primary transition-colors truncate">
                         {product.name}
                       </h3>
                     </Link>
-                    <p className="font-body text-xs md:text-sm font-semibold text-primary">₹{product.price.toLocaleString()}</p>
+                    <p className="font-body text-[11px] md:text-sm font-semibold text-primary">₹{product.price.toLocaleString()}</p>
                   </div>
                   <button
                     onClick={() => addToCart(product, product.sizes[0], product.colors[0])}
-                    className="p-1.5 md:p-2 rounded-xl bg-primary/10 hover:bg-primary/20 transition-colors flex-shrink-0"
+                    className="p-1 md:p-2 rounded-lg md:rounded-xl bg-primary/10 hover:bg-primary/20 transition-colors flex-shrink-0"
                     title="Quick add to cart"
                   >
-                    <ShoppingBag size={14} className="text-primary md:w-4 md:h-4" />
+                    <ShoppingBag size={12} className="text-primary md:w-4 md:h-4" />
                   </button>
                 </div>
               </motion.div>
