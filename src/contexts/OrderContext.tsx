@@ -6,7 +6,7 @@ interface OrderContextType {
   customOrders: CustomOrder[];
   addOrder: (order: Omit<Order, "id" | "createdAt">) => Order;
   updateOrderStatus: (id: string, status: Order["status"]) => void;
-  addCustomOrder: (order: Omit<CustomOrder, "id" | "createdAt">) => void;
+  addCustomOrder: (order: Omit<CustomOrder, "id" | "createdAt">) => CustomOrder;
   updateCustomOrderStatus: (id: string, status: CustomOrder["status"]) => void;
   getUserOrders: (userId: string) => Order[];
 }
