@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { ShoppingBag, Heart, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useProducts } from "@/contexts/ProductContext";
 import { useCart } from "@/contexts/CartContext";
+import { useFavorites } from "@/contexts/FavoritesContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -16,6 +17,7 @@ const MOBILE_PAGE_SIZE = 4;
 const Shop = () => {
   const { products } = useProducts();
   const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get("category");
   const [selectedCategory, setSelectedCategory] = useState(categoryParam && categories.includes(categoryParam) ? categoryParam : "All");
@@ -128,8 +130,16 @@ const Shop = () => {
                     <span className="absolute top-2 left-2 md:top-4 md:left-4 px-2 md:px-3 py-0.5 md:py-1 bg-card/90 backdrop-blur-sm rounded-full font-body text-[10px] md:text-xs font-medium text-foreground">
                       {product.category}
                     </span>
+                    <button
+                      onClick={(e) => { e.preventDefault(); toggleFavorite(product); }}
+                      className={`absolute top-2 right-2 md:top-4 md:right-4 p-1.5 md:p-2 rounded-full backdrop-blur-sm transition-colors ${
+                        isFavorite(product.id) ? "bg-primary/90 text-accent-foreground" : "bg-card/90 text-muted-foreground hover:text-primary"
+                      }`}
+                    >
+                      <Heart size={14} className={`md:w-4 md:h-4 ${isFavorite(product.id) ? "fill-current" : ""}`} />
+                    </button>
                     {product.stock <= 3 && (
-                      <span className="absolute top-2 right-2 md:top-4 md:right-4 px-2 md:px-3 py-0.5 md:py-1 bg-primary/90 backdrop-blur-sm rounded-full font-body text-[10px] md:text-xs font-medium text-accent-foreground">
+                      <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 px-2 md:px-3 py-0.5 md:py-1 bg-primary/90 backdrop-blur-sm rounded-full font-body text-[10px] md:text-xs font-medium text-accent-foreground">
                         Only {product.stock} left
                       </span>
                     )}

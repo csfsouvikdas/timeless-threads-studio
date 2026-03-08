@@ -8,6 +8,7 @@ import { CartProvider } from "@/contexts/CartContext";
 import { ProductProvider } from "@/contexts/ProductContext";
 import { OrderProvider } from "@/contexts/OrderContext";
 import { CouponProvider } from "@/contexts/CouponContext";
+import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
@@ -28,6 +29,7 @@ import SizeGuide from "./pages/SizeGuide";
 import CareInstructions from "./pages/CareInstructions";
 import TrackOrder from "./pages/TrackOrder";
 import NotFound from "./pages/NotFound";
+import Favorites from "./pages/Favorites";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +41,7 @@ const App = () => (
           <CartProvider>
             <OrderProvider>
               <CouponProvider>
+              <FavoritesProvider>
               <Toaster />
               <Sonner />
               <BrowserRouter>
@@ -52,6 +55,7 @@ const App = () => (
                   <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/signup" element={<Signup />} />
                   <Route path="/my-orders" element={<MyOrders />} />
+                  <Route path="/favorites" element={<Favorites />} />
                   <Route path="/custom-order" element={<CustomOrder />} />
                   <Route path="/admin/login" element={<AdminLogin />} />
                   <Route path="/admin" element={<Admin />} />
@@ -65,6 +69,7 @@ const App = () => (
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>
+              </FavoritesProvider>
               </CouponProvider>
             </OrderProvider>
           </CartProvider>

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ShoppingBag, Heart, Minus, Plus, ArrowLeft } from "lucide-react";
 import { useProducts } from "@/contexts/ProductContext";
 import { useCart } from "@/contexts/CartContext";
+import { useFavorites } from "@/contexts/FavoritesContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -12,6 +13,7 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const { getProduct } = useProducts();
   const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const product = getProduct(id || "");
 
   const [selectedSize, setSelectedSize] = useState("");
@@ -143,8 +145,13 @@ const ProductDetail = () => {
                   <ShoppingBag size={18} />
                   Add to Cart
                 </button>
-                <button className="p-4 rounded-full border border-border hover:bg-pink/30 transition-colors">
-                  <Heart size={18} className="text-foreground" />
+                <button
+                  onClick={() => toggleFavorite(product)}
+                  className={`p-4 rounded-full border transition-colors ${
+                    isFavorite(product.id) ? "bg-primary/20 border-primary" : "border-border hover:bg-pink/30"
+                  }`}
+                >
+                  <Heart size={18} className={isFavorite(product.id) ? "text-primary fill-primary" : "text-foreground"} />
                 </button>
               </div>
 

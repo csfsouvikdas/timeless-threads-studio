@@ -4,6 +4,7 @@ import { ShoppingBag, Menu, X, User, LogOut, Heart, Sparkles } from "lucide-reac
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useFavorites } from "@/contexts/FavoritesContext";
 
 const navLinks = [
   { label: "Shop", href: "/shop" },
@@ -16,6 +17,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { itemCount } = useCart();
+  const { favCount } = useFavorites();
   const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
 
@@ -97,6 +99,23 @@ const Navbar = () => {
                 Sign In
               </Link>
             )}
+
+            <Link
+              to="/favorites"
+              className="relative p-2.5 rounded-full hover:bg-pink/20 transition-colors"
+              aria-label="Favorites"
+            >
+              <Heart size={19} className="text-foreground" />
+              {favCount > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary text-accent-foreground text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm"
+                >
+                  {favCount}
+                </motion.span>
+              )}
+            </Link>
 
             <Link
               to="/cart"
