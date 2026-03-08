@@ -57,13 +57,13 @@ const Shop = () => {
           </motion.div>
 
           {/* Filters bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-            <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-3 md:gap-4 mb-6 md:mb-8">
+            <div className="flex flex-wrap gap-1.5 md:gap-2">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => handleCategoryChange(cat)}
-                  className={`px-4 py-2 rounded-full font-body text-sm font-medium transition-all ${
+                  className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full font-body text-xs md:text-sm font-medium transition-all ${
                     selectedCategory === cat
                       ? "bg-primary text-accent-foreground"
                       : "bg-card text-muted-foreground border border-border hover:border-primary"
