@@ -64,18 +64,18 @@ const Hero = () => {
             transition={{ delay: 0.8 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <a
-              href="#products"
+            <Link
+              to="/shop"
               className="inline-flex items-center justify-center px-8 py-4 bg-primary text-accent-foreground font-body font-semibold text-sm rounded-full hover:shadow-hover transition-all duration-300 hover:-translate-y-0.5"
             >
               Shop Collection
-            </a>
-            <a
-              href="#custom"
+            </Link>
+            <Link
+              to="/custom-order"
               className="inline-flex items-center justify-center px-8 py-4 bg-card text-foreground font-body font-semibold text-sm rounded-full border border-border hover:shadow-card transition-all duration-300 hover:-translate-y-0.5"
             >
               Create Custom Design
-            </a>
+            </Link>
           </motion.div>
         </div>
       </div>

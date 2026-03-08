@@ -108,12 +108,12 @@ const FeaturedProducts = () => {
           transition={{ delay: 0.6 }}
           className="text-center mt-12"
         >
-          <a
-            href="#"
+          <Link
+            to="/shop"
             className="inline-flex items-center justify-center px-8 py-4 bg-card text-foreground font-body font-semibold text-sm rounded-full border border-border hover:shadow-card transition-all duration-300 hover:-translate-y-0.5"
           >
             View All Products
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>
