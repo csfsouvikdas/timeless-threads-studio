@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { ShoppingBag, Heart } from "lucide-react";
 import productHoodie from "@/assets/product-hoodie.jpg";
 import productTshirt from "@/assets/product-tshirt.jpg";
