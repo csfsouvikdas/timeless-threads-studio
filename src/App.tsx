@@ -18,6 +18,13 @@ import MyOrders from "./pages/MyOrders";
 import CustomOrder from "./pages/CustomOrder";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
+import OurStory from "./pages/OurStory";
+import FAQs from "./pages/FAQs";
+import ContactUs from "./pages/ContactUs";
+import ShippingReturns from "./pages/ShippingReturns";
+import SizeGuide from "./pages/SizeGuide";
+import CareInstructions from "./pages/CareInstructions";
+import TrackOrder from "./pages/TrackOrder";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +51,13 @@ const App = () => (
                   <Route path="/custom-order" element={<CustomOrder />} />
                   <Route path="/admin/login" element={<AdminLogin />} />
                   <Route path="/admin" element={<Admin />} />
+                  <Route path="/our-story" element={<OurStory />} />
+                  <Route path="/faqs" element={<FAQs />} />
+                  <Route path="/contact" element={<ContactUs />} />
+                  <Route path="/shipping-returns" element={<ShippingReturns />} />
+                  <Route path="/size-guide" element={<SizeGuide />} />
+                  <Route path="/care-instructions" element={<CareInstructions />} />
+                  <Route path="/track-order" element={<TrackOrder />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>
