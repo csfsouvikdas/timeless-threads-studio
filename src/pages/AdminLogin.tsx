@@ -83,6 +83,7 @@ const AdminLogin = () => {
             <p className="font-semibold mb-1">Demo Admin Credentials:</p>
             <p>Email: admin@timelessthreads.com</p>
             <p>Password: admin123</p>
+            <p>Password: admin123</p>
           </div>
         </motion.div>
       </div>
