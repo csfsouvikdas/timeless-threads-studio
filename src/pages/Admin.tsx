@@ -521,4 +521,79 @@ const ProductForm = ({
   );
 };
 
+const CouponForm = ({
+  coupon,
+  onSave,
+  onCancel,
+}: {
+  coupon: Coupon | null;
+  onSave: (data: Partial<Coupon>) => void;
+  onCancel: () => void;
+}) => {
+  const [code, setCode] = useState(coupon?.code || "");
+  const [discountPercent, setDiscountPercent] = useState(coupon?.discountPercent?.toString() || "");
+  const [maxDiscount, setMaxDiscount] = useState(coupon?.maxDiscount?.toString() || "");
+  const [minOrderAmount, setMinOrderAmount] = useState(coupon?.minOrderAmount?.toString() || "0");
+  const [validTill, setValidTill] = useState(coupon?.validTill || "");
+  const [usageLimit, setUsageLimit] = useState(coupon?.usageLimit?.toString() || "100");
+  const [active, setActive] = useState(coupon?.active ?? true);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave({
+      code: code.toUpperCase().trim(),
+      discountPercent: Number(discountPercent),
+      maxDiscount: maxDiscount ? Number(maxDiscount) : undefined,
+      minOrderAmount: Number(minOrderAmount),
+      validTill,
+      usageLimit: Number(usageLimit),
+      active,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-card rounded-2xl border border-border p-6 mb-6 space-y-4">
+      <h4 className="font-heading text-lg font-semibold text-foreground">{coupon ? "Edit Coupon" : "Add Coupon"}</h4>
+      <div className="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label className="font-body text-sm font-medium text-foreground mb-1 block">Coupon Code</label>
+          <input value={code} onChange={(e) => setCode(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm uppercase focus:outline-none focus:ring-2 focus:ring-ring" placeholder="e.g. SAVE20" />
+        </div>
+        <div>
+          <label className="font-body text-sm font-medium text-foreground mb-1 block">Discount %</label>
+          <input type="number" min="1" max="100" value={discountPercent} onChange={(e) => setDiscountPercent(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+        </div>
+        <div>
+          <label className="font-body text-sm font-medium text-foreground mb-1 block">Max Discount (₹, optional)</label>
+          <input type="number" min="0" value={maxDiscount} onChange={(e) => setMaxDiscount(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+        </div>
+        <div>
+          <label className="font-body text-sm font-medium text-foreground mb-1 block">Min Order Amount (₹)</label>
+          <input type="number" min="0" value={minOrderAmount} onChange={(e) => setMinOrderAmount(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+        </div>
+        <div>
+          <label className="font-body text-sm font-medium text-foreground mb-1 block">Valid Till</label>
+          <input type="date" value={validTill} onChange={(e) => setValidTill(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+        </div>
+        <div>
+          <label className="font-body text-sm font-medium text-foreground mb-1 block">Usage Limit</label>
+          <input type="number" min="1" value={usageLimit} onChange={(e) => setUsageLimit(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-border bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+        </div>
+      </div>
+      <label className="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} className="rounded border-border" />
+        <span className="font-body text-sm text-foreground">Active</span>
+      </label>
+      <div className="flex gap-3">
+        <button type="submit" className="px-6 py-3 bg-primary text-accent-foreground font-body font-semibold text-sm rounded-full">
+          {coupon ? "Update" : "Create"} Coupon
+        </button>
+        <button type="button" onClick={onCancel} className="px-6 py-3 bg-card text-foreground font-body text-sm rounded-full border border-border hover:bg-muted">
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+};
+
 export default Admin;
