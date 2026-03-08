@@ -23,7 +23,7 @@ const Admin = () => {
   const [showAddForm, setShowAddForm] = useState(false);
 
   if (!user || !isAdmin) {
-    navigate("/login?redirect=/admin");
+    navigate("/admin/login");
     return null;
   }
 

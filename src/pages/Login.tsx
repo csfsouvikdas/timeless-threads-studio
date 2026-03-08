@@ -82,12 +82,6 @@ const Login = () => {
               Sign up
             </Link>
           </p>
-
-          <div className="mt-4 p-3 rounded-xl bg-muted/50 font-body text-xs text-muted-foreground">
-            <p className="font-semibold mb-1">Demo Admin Login:</p>
-            <p>Email: admin@timelessthreads.com</p>
-            <p>Password: admin123</p>
-          </div>
         </motion.div>
       </div>
     </div>
