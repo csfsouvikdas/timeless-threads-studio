@@ -17,6 +17,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { itemCount } = useCart();
+  const { favCount } = useFavorites();
   const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
 
