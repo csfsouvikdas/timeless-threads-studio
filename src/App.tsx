@@ -29,6 +29,7 @@ import SizeGuide from "./pages/SizeGuide";
 import CareInstructions from "./pages/CareInstructions";
 import TrackOrder from "./pages/TrackOrder";
 import NotFound from "./pages/NotFound";
+import Favorites from "./pages/Favorites";
 
 const queryClient = new QueryClient();
 
