@@ -3,15 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Package, ShoppingCart, DollarSign, TrendingUp,
-  Plus, Pencil, Trash2, Eye, EyeOff, FileText, ImagePlus, X
+  Plus, Pencil, Trash2, Eye, EyeOff, FileText, ImagePlus, X, Tag
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProducts } from "@/contexts/ProductContext";
 import { useOrders } from "@/contexts/OrderContext";
+import { useCoupons, Coupon } from "@/contexts/CouponContext";
 import { Product, Order } from "@/types";
 import Navbar from "@/components/Navbar";
 
-type Tab = "overview" | "products" | "orders" | "custom-orders";
+type Tab = "overview" | "products" | "orders" | "custom-orders" | "coupons";
 
 const Admin = () => {
   const { user, isAdmin } = useAuth();
