@@ -47,23 +47,23 @@ const Shop = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="pt-28 pb-20">
-        <div className="container mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-            <h1 className="font-heading text-4xl md:text-5xl font-bold text-foreground mb-4">Our Collection</h1>
-            <p className="font-body text-muted-foreground max-w-lg mx-auto">
+      <div className="pt-24 md:pt-28 pb-12 md:pb-20">
+        <div className="container mx-auto px-4 md:px-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8 md:mb-12">
+            <h1 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-2 md:mb-4">Our Collection</h1>
+            <p className="font-body text-sm md:text-base text-muted-foreground max-w-lg mx-auto">
               Every piece is handcrafted with love. Find your perfect crochet companion.
             </p>
           </motion.div>
 
           {/* Filters bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-            <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-3 md:gap-4 mb-6 md:mb-8">
+            <div className="flex flex-wrap gap-1.5 md:gap-2">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => handleCategoryChange(cat)}
-                  className={`px-4 py-2 rounded-full font-body text-sm font-medium transition-all ${
+                  className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full font-body text-xs md:text-sm font-medium transition-all ${
                     selectedCategory === cat
                       ? "bg-primary text-accent-foreground"
                       : "bg-card text-muted-foreground border border-border hover:border-primary"
@@ -77,7 +77,7 @@ const Shop = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-2 rounded-xl bg-card border border-border font-body text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                className="px-3 py-1.5 md:px-4 md:py-2 rounded-xl bg-card border border-border font-body text-xs md:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               >
                 {sortOptions.map((opt) => (
                   <option key={opt}>{opt}</option>
@@ -110,7 +110,7 @@ const Shop = () => {
           </div>
 
           {/* Product grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
             {displayProducts.map((product, i) => (
               <motion.div
                 key={product.id}
@@ -120,7 +120,7 @@ const Shop = () => {
                 className="group"
               >
                 <Link to={`/product/${product.id}`}>
-                  <div className="relative rounded-2xl overflow-hidden mb-3 md:mb-4 bg-beige">
+                  <div className="relative rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-4 bg-beige">
                     <img
                       src={product.images[0]}
                       alt={product.name}
@@ -132,11 +132,11 @@ const Shop = () => {
                     </span>
                     <button
                       onClick={(e) => { e.preventDefault(); toggleFavorite(product); }}
-                      className={`absolute top-2 right-2 md:top-4 md:right-4 p-1.5 md:p-2 rounded-full backdrop-blur-sm transition-colors ${
+                      className={`absolute top-1.5 right-1.5 md:top-4 md:right-4 p-1 md:p-2 rounded-full backdrop-blur-sm transition-colors ${
                         isFavorite(product.id) ? "bg-primary/90 text-accent-foreground" : "bg-card/90 text-muted-foreground hover:text-primary"
                       }`}
                     >
-                      <Heart size={14} className={`md:w-4 md:h-4 ${isFavorite(product.id) ? "fill-current" : ""}`} />
+                      <Heart size={12} className={`md:w-4 md:h-4 ${isFavorite(product.id) ? "fill-current" : ""}`} />
                     </button>
                     {product.stock <= 3 && (
                       <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 px-2 md:px-3 py-0.5 md:py-1 bg-primary/90 backdrop-blur-sm rounded-full font-body text-[10px] md:text-xs font-medium text-accent-foreground">
@@ -146,20 +146,20 @@ const Shop = () => {
                   </div>
                 </Link>
                 <div className="flex items-start justify-between gap-1">
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <Link to={`/product/${product.id}`}>
-                      <h3 className="font-heading text-sm md:text-lg font-semibold text-foreground mb-0.5 md:mb-1 hover:text-primary transition-colors truncate">
+                      <h3 className="font-heading text-xs md:text-lg font-semibold text-foreground mb-0.5 hover:text-primary transition-colors truncate">
                         {product.name}
                       </h3>
                     </Link>
-                    <p className="font-body text-xs md:text-sm font-semibold text-primary">₹{product.price.toLocaleString()}</p>
+                    <p className="font-body text-[11px] md:text-sm font-semibold text-primary">₹{product.price.toLocaleString()}</p>
                   </div>
                   <button
                     onClick={() => addToCart(product, product.sizes[0], product.colors[0])}
-                    className="p-1.5 md:p-2 rounded-xl bg-primary/10 hover:bg-primary/20 transition-colors flex-shrink-0"
+                    className="p-1 md:p-2 rounded-lg md:rounded-xl bg-primary/10 hover:bg-primary/20 transition-colors flex-shrink-0"
                     title="Quick add to cart"
                   >
-                    <ShoppingBag size={14} className="text-primary md:w-4 md:h-4" />
+                    <ShoppingBag size={12} className="text-primary md:w-4 md:h-4" />
                   </button>
                 </div>
               </motion.div>
