@@ -17,7 +17,7 @@ const HowItWorks = () => {
   const { normalized } = useMousePosition();
 
   return (
-    <section id="process" className="py-24 bg-background relative overflow-hidden" ref={ref}>
+    <section id="process" className="py-12 md:py-24 bg-background relative overflow-hidden" ref={ref}>
       {/* Cursor-reactive background orbs */}
       <motion.div
         className="absolute w-72 h-72 bg-pink/10 rounded-full blur-3xl"
