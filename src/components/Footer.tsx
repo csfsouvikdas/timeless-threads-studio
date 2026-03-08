@@ -1,9 +1,26 @@
 import { Instagram, Send, Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 
-const footerLinks = {
-  Shop: ["Hoodies", "T-Shirts", "Sweatshirts", "Custom Orders", "Limited Edition"],
-  Company: ["Our Story", "How It Works", "FAQs", "Contact Us"],
-  Support: ["Shipping & Returns", "Size Guide", "Care Instructions", "Track Order"],
+const footerLinks: Record<string, { label: string; to: string }[]> = {
+  Shop: [
+    { label: "Hoodies", to: "/shop?category=Hoodies" },
+    { label: "T-Shirts", to: "/shop?category=T-Shirts" },
+    { label: "Sweatshirts", to: "/shop?category=Sweatshirts" },
+    { label: "Custom Orders", to: "/custom-order" },
+    { label: "Limited Edition", to: "/shop?category=Limited+Edition" },
+  ],
+  Company: [
+    { label: "Our Story", to: "/our-story" },
+    { label: "How It Works", to: "/#how-it-works" },
+    { label: "FAQs", to: "/faqs" },
+    { label: "Contact Us", to: "/contact" },
+  ],
+  Support: [
+    { label: "Shipping & Returns", to: "/shipping-returns" },
+    { label: "Size Guide", to: "/size-guide" },
+    { label: "Care Instructions", to: "/care-instructions" },
+    { label: "Track Order", to: "/track-order" },
+  ],
 };
 
 const Footer = () => {
