@@ -8,6 +8,7 @@ import { CartProvider } from "@/contexts/CartContext";
 import { ProductProvider } from "@/contexts/ProductContext";
 import { OrderProvider } from "@/contexts/OrderContext";
 import { CouponProvider } from "@/contexts/CouponContext";
+import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
