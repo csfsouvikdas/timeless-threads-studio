@@ -13,7 +13,15 @@ interface ProductContextType {
 const ProductContext = createContext<ProductContextType>({} as ProductContextType);
 
 export const ProductProvider = ({ children }: { children: ReactNode }) => {
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [products, setProducts] = useState<Product[]>(() => {
+    const saved = localStorage.getItem("tt_products");
+    return saved ? JSON.parse(saved) : initialProducts;
+  });
+
+  const persist = (items: Product[]) => {
+    setProducts(items);
+    localStorage.setItem("tt_products", JSON.stringify(items));
+  };
 
   const addProduct = (product: Omit<Product, "id">) => {
     const newProduct: Product = { ...product, id: `prod-${Date.now()}` };
